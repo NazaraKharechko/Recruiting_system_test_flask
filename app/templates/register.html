@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}
+ Register
+{% endblock %}
+{% block content %}
+    <br>
+<br>
+<br>
+    {% if error %}
+        <div>{{ error }}</div>
+    {% endif %}
+    <form method="post">
+        {% for field in form %}
+            {% if not field == form.register %}
+                <div>
+                    {{ field.label }}
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                    <div>{{ field.errors[0] }}</div>
+                {% endif %}
+            {% else %}
+                <div>{{ field }}</div>
+            {% endif %}
+        {% endfor %}
+    </form>
+{% endblock %}

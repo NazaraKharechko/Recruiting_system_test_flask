@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}
+ Positions
+{% endblock %}
+{% block content %}
+    <br>
+<br>
+<br>
+    <h1>Positions</h1>
+
+     {% for p in position %}
+        <div>{{ p.positions }}</div>
+           <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo{{ p.id }}">Open opus</button>
+                <div id="demo{{ p.id }}" class="collapse"><p class="text-center" >{{ p.description }}</p>
+                    <a href="{{ url_for('cv') }}"  role="button"   class="btn btn-info btn-lg btn-block">Send a CV</a>
+                </div>
+    {% endfor %}
+{% endblock %}
