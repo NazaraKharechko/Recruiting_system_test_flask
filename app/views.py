@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for
 from flask_login import login_user, logout_user
 from app import app, db
 from app.forms import LoginForm, RegisterForm, Send_cv_Form
-from app.models import UserModel, Positions, CV_model
+from app.models import UserModel, Positions, CV_model, InterviewModel
 import datetime
 
 
@@ -64,3 +64,9 @@ def cv():
         return redirect(url_for('positions'))
     return render_template('cv.html', form=form)
 
+
+@app.route('/interview')
+def interview():
+    interview = InterviewModel.query.all()
+    print(interview)
+    return render_template('interview.html', interview=interview)
