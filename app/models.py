@@ -1,5 +1,6 @@
 from app import db
 from flask_login import UserMixin
+import datetime
 
 
 class UserModel(db.Model, UserMixin):
@@ -20,9 +21,20 @@ class Positions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     positions = db.Column(db.String(50), nullable=False, unique=True)
     description = db.Column(db.String(350), nullable=False)
+    start_date = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
 
     def __repr__(self):
-        return f'id = {self.id} positions = {self.positions} {self.description}'
+        return f'id = {self.id} positions = {self.positions} {self.end_date}'
+
+    @classmethod
+    def del_data(cls):
+        tims_now = datetime.datetime.now()
+        d = tims_now.strftime('%Y-%m-%d %H:%M:00')
+        if d >= cls.end_date:
+            print(cls.end_date)
+            db.session.delete(self.id)
+            db.session.commit()
 
 
 class CV_model(db.Model):
@@ -33,7 +45,8 @@ class CV_model(db.Model):
     name = db.Column(db.String(20), nullable=False)
     age = db.Column(db.Integer(), nullable=False)
     cv = db.Column(db.String(50), default='cv netu')
-    recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id', ondelete='CASCADE'), nullable=False, default='1')
+    recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id', ondelete='CASCADE'), nullable=False,
+                             default=1 or 2)
 
     def __repr__(self):
         return f'id = {self.id} positions = {self.name}'

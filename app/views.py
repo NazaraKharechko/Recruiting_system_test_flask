@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user
 from app import app, db
 from app.forms import LoginForm, RegisterForm, Send_cv_Form
 from app.models import UserModel, Positions, CV_model
+import datetime
 
 
 @app.route('/')
