@@ -10,7 +10,7 @@
     <br>
 
      {% for p in position %}
-        <div>{{ p.positions }}  Start curs => {{ p.start_date }} End curs => {{ p.end_date }}</div>
+        <div>{{ p.positions }}    <br> <b> Start curs => {{ p.start_date }} End curs => {{ p.end_date }}</div>
            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo{{ p.id }}">Open opus</button>
                 <div id="demo{{ p.id }}" class="collapse"><p class="text-center" >{{ p.description }}</p>
                     <a href="{{ url_for('cv') }}"  role="button"   class="btn btn-info btn-lg btn-block">Send a CV</a>
