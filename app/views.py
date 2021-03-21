@@ -109,6 +109,7 @@ def my_cv():
 def recruiter():
     position = Positions.query.all()
     form = Positions_Create_Form(request.form)
+    all_users = UserModel.query.all()
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
         del data['create']
@@ -116,7 +117,7 @@ def recruiter():
         db.session.add(pos)
         db.session.commit()
         return redirect(url_for('recruiter'))
-    return render_template('recruiter.html', position=position, form=form)
+    return render_template('recruiter.html', position=position, form=form, all_users=all_users)
 
 
 @app.route('/delete/position', methods=['GET', 'POST'])

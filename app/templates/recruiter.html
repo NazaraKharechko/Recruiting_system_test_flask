@@ -40,4 +40,12 @@
     <br>
         <a href="{{ url_for('create_interview') }}"><button class="btn btn-info btn-lg btn-block">Create_interview</button></a>
 
+    <br>
+    <br>
+    <h1>All users</h1>
+    {% for all in all_users %}
+        <div> Email => {{ all.email }} === {{ all.id }} id</div>
+
+    {% endfor %}
+
 {% endblock %}
