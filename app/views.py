@@ -37,7 +37,7 @@ def register():
         user = UserModel(**data)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('login'))
+        return redirect(url_for('home'))
     return render_template('register.html', form=form)
 
 
