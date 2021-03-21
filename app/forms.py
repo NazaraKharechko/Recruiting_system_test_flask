@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, PasswordField, SubmitField, FileField
+from wtforms import Form, StringField, PasswordField, SubmitField, FileField, DateField, TextField
 from wtforms.validators import DataRequired, length, Email, EqualTo
 
 
@@ -22,3 +22,23 @@ class Send_cv_Form(Form):
     age = StringField('Age')
     cv = FileField('Cv')
     send = SubmitField('Send')
+
+
+class Positions_Create_Form(Form):
+    positions = StringField('Positions')
+    description = StringField('Description')
+    start_date = StringField('Start_date')
+    end_date = StringField('End_date')
+    create = SubmitField('Create')
+
+
+class Positions_Delete_Form(Form):
+    id_delete = StringField('Id_delete')
+    delete = SubmitField('Delete')
+
+
+class Create_Interview_Form(Form):
+    interview_date = StringField('Interview_date')
+    recruiter_id = StringField('Recruiter_id')
+    candidates_id = StringField('Candidates_id')
+    create = SubmitField('Create')

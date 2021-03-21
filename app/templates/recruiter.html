@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+ Recruiter
+{% endblock %}
+{% block content %}
+    <br>
+<br>
+<br>
+    <h1>Positions</h1>
+    <br>
+
+     {% for p in position %}
+        <div>{{ p.positions }}    <br> <b> Start curs => {{ p.start_date }} End curs => {{ p.end_date }}</div>
+           <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo{{ p.id }}">Open opus</button>
+                <div id="demo{{ p.id }}" class="collapse"><p class="text-center" >{{ p.description }}</p>
+                    <a href="{{ url_for('cv') }}"  role="button"   class="btn btn-info btn-lg btn-block">Send a CV</a>
+                </div>
+    <br>
+    <br>
+    {% endfor %}
+
+     <form method="post">
+        {% for field in form %}
+            {% if not field == form.register %}
+                <div>
+                    {{ field.label }}
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                    <div>{{ field.errors[0] }}</div>
+                {% endif %}
+            {% else %}
+                <div>{{ field }}</div>
+            {% endif %}
+        {% endfor %}
+    </form>
+
+    <br>
+        <a href="{{ url_for('delete_position') }}"><button class="btn btn-info btn-lg btn-block">Delete</button></a>
+    <br>
+        <a href="{{ url_for('create_interview') }}"><button class="btn btn-info btn-lg btn-block">Create_interview</button></a>
+
+{% endblock %}

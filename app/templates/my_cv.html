@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+ My Cv
+{% endblock %}
+{% block content %}
+<h1>You Cv</h1>
+
+<br>
+ <div> Welcome {{ cvs.name }}    <br> <b> You email => {{ cvs.email }}<br> End you cv => {{ cvs.cv }}</div>
+    <a href="{{ url_for('interview') }}"><button type="button" class="btn btn-info" data-toggle="collapse" >Interview </button></a>
+
+{% endblock %}

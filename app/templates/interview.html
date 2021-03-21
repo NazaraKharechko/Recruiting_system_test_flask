@@ -9,13 +9,14 @@
     <h1>Interview yourself</h1>
     <br>
 
-     {% for i in interview %}
-         <div> Ваше ітервю заплвновано на <h4>{{ i.interview_date }}</h4> не забудьте)</div>
+
+         <div> Ваше ітервю заплвновано на <h4>{{ interview.interview_date }}</h4> не забудьте)</div>
          <br>
          <br>
-         <div> Ваш бос який її буде проводити за <h5>N{{ i.recruiter_id }}</h5> імя згодом взнаєте =) шутка Боб</div>
+         <div> Ваш бос який її буде проводити за <h5>N{{ interview.recruiter_id }}</h5> імя згодом взнаєте =) шутка Боб</div>
 
     <br>
     <br>
-    {% endfor %}
+        <a href="{{ url_for('my_cv') }}"><button type="button" class="btn btn-info" data-toggle="collapse" > You cv</button></a>
+
 {% endblock %}
