@@ -92,12 +92,3 @@ class InterviewModel(db.Model):
     def __repr__(self):
         return f'data => {self.interview_date}'
 
-
-@manager.command
-def seed():
-    db.session.add(admin)
-    db.session.commit()
-
-
-admin = {'id': 1, 'email': 'admin@gmail.com',
-         'password': 'admin2020', 'admin': 1}
