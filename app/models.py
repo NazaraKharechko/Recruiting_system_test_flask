@@ -1,7 +1,7 @@
 from app import db
 from flask_login import UserMixin
 import datetime
-# from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import hashlib
 
 
@@ -10,15 +10,19 @@ class UserModel(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
-    password = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(120), nullable=False)
     admin = db.Column(db.Boolean, default=False, nullable=False)
 
     def __repr__(self):
         return f'id = {self.id} email = {self.email}'
 
-    # def __init__(self):
-    #     h = hashlib.md5(selfpassword.encode())
-    #     h.hexdigest()
+    # def __init__(self, *args, **kwargs):
+    #     password = password.kwargs.pop('password')
+    #     password_has = generate_password_hash(password)
+    #     super.__init__(password=password_has, *args, **kwargs)
+    #
+    # def verify_password(self):
+    #     return check_password_hash(self.password, pwd)
 
 
 class Positions(db.Model):
@@ -51,12 +55,13 @@ class CV_model(db.Model):
     name = db.Column(db.String(20), nullable=False)
     age = db.Column(db.Integer(), nullable=False)
     cv = db.Column(db.String(50), default='cv netu')
+    stek = db.Column(db.String(50), nullable=False)
     recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id', ondelete='CASCADE'), nullable=False,
                              default=1 or 2)
     interview = db.relationship('InterviewModel', backref='candidates', lazy=True)
 
     def __repr__(self):
-        return f'id = {self.id} positions = {self.name}'
+        return f'id = {self.id} positions = {self.name} stek => {self.stek}'
 
 
 class RecruiterModel(db.Model, UserMixin):
@@ -64,7 +69,7 @@ class RecruiterModel(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
-    password = db.Column(db.String(20), nullable=False)
+    password = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     profession = db.Column(db.String(20), nullable=False)
     status = db.Column(db.Boolean, default=False, nullable=False)
@@ -74,9 +79,13 @@ class RecruiterModel(db.Model, UserMixin):
     def __repr__(self):
         return f'name => {self.name} profession => {self.profession}'
 
-    def __init__(self):
-        h = hashlib.md5(selfpassword.encode())
-        h.hexdigest()
+    def __init__(self, *args, **kwargs):
+        password = password.kwargs.pop('password')
+        password_has = generate_password_hash(password)
+        super.__init__(password=password_has, *args, **kwargs)
+
+    def verify_password(self):
+        return check_password_hash(self.password, pwd)
 
 
 class InterviewModel(db.Model):

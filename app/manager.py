@@ -1,4 +1,9 @@
-from .models import UserModel, RecruiterModel, Positions
+from models import UserModel, RecruiterModel, Positions
+from flask_script import Manager
+from app import db, app
+
+manager = Manager(app)
+
 
 admin = {'id': 1, 'email': 'admin@gmail.com',
          'password': 'admin2020', 'admin': 1}
@@ -11,12 +16,13 @@ positions = {'id': 1, 'positions': 'Python',
              'end_date': '2021-05-02 12:06:00'}
 
 
-admin = UserModel(**admin)
-recruiter = RecruiterModel(**recruiter)
-positions = Positions(**positions)
-
-
 @manager.command
 def seed():
-    db.session.add(admin, recruiter, positions)
+    db.session.add(UserModel(**admin))
+    db.session.add(RecruiterModel(**recruiter))
+    db.session.add(Positions(**positions))
     db.session.commit()
+
+
+if __name__ == '__main__':
+    manager.run()

@@ -44,7 +44,13 @@
     <br>
     <h1>All users</h1>
     {% for all in all_users %}
-        <div> Email => {{ all.email }} === {{ all.id }} id</div>
+        <div> Email => {{ all.email }} id == {{ all.id }}  stek => {{ all.stek }}</div>
+
+    {% endfor %}
+
+    <h1>All interview</h1>
+    {% for i in interview %}
+        <div> Data => {{ i.interview_date }} recruiter_id == {{ i.recruiter_id }} candidates_id = {{ i.candidates_id }}</div>
 
     {% endfor %}
 

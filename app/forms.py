@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, PasswordField, SubmitField, FileField, DateField, TextField
+from wtforms import Form, StringField, PasswordField, SubmitField, FileField, DateField, SelectField
 from wtforms.validators import DataRequired, length, Email, EqualTo
 
 
@@ -17,9 +17,16 @@ class LoginForm(Form):
 
 
 class Send_cv_Form(Form):
+    choices = [('Python', 'Python'),
+               ('JS', 'JS'),
+               ('Html', 'Html'),
+               ('Python 3+', 'Python 3+'),
+               ('Vu.js', 'Vu.js')]
     email = StringField('Email', [DataRequired(),  length(3, 30, 'Email must be 3-30 characters')])
     name = StringField('Name')
     age = StringField('Age')
+    stek = SelectField(choices=choices)
+
     cv = FileField('Cv')
     send = SubmitField('Send')
 

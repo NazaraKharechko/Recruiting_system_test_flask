@@ -17,10 +17,14 @@ def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         candidate = UserModel.query.filter_by(email=form.email.data).first()
-        print(candidate)
-        if candidate and candidate.password == form.password.data:
+        recruiter = RecruiterModel.query.filter_by(email=form.email.data).first()
+        if recruiter and recruiter.password == form.password.data:
+            return redirect('/recruiter')
+        if candidate and candidate.password == form.password.data and candidate.admin == True:
             login_user(candidate)
             return redirect('admin')
+        else:
+            return redirect('/my/cv')
     return render_template('login.html', form=form)
 
 
@@ -76,32 +80,34 @@ def interview():
     return render_template('interview.html', interview=interview)
 
 
-@app.route('/login/users', methods=['GET', 'POST'])
-def login_users():
-    form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate():
-        candidate = UserModel.query.filter_by(email=form.email.data).first()
-        if candidate and candidate.password == form.password.data:
-            login_user(candidate)
-            return redirect('/my/cv')
-    return render_template('login_users.html', form=form)
+# @app.route('/login/users', methods=['GET', 'POST'])
+# def login_users():
+#     form = LoginForm(request.form)
+#     if request.method == 'POST' and form.validate():
+#         candidate = UserModel.query.filter_by(email=form.email.data).first()
+#         if candidate and candidate.password == form.password.data:
+#             login_user(candidate)
+#             return redirect('/my/cv')
+#     return render_template('login_users.html', form=form)
+#
+#
+# @app.route('/login/recruiter', methods=['GET', 'POST'])
+# def login_recruiter():
+#     form = LoginForm(request.form)
+#     if request.method == 'POST' and form.validate():
+#         candidate = RecruiterModel.query.filter_by(email=form.email.data).first()
+#         if candidate and candidate.password == form.password.data:
+#             login_user(candidate)
+#             return redirect('/recruiter')
+#     return render_template('login_users.html', form=form)
 
 
-@app.route('/login/recruiter', methods=['GET', 'POST'])
-def login_recruiter():
-    form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate():
-        candidate = RecruiterModel.query.filter_by(email=form.email.data).first()
-        if candidate and candidate.password == form.password.data:
-            login_user(candidate)
-            return redirect('/recruiter')
-    return render_template('login_users.html', form=form)
-
-
-@app.route('/my/cv')
+@app.route('/my/cv',  methods=['GET', 'POST'])
 def my_cv():
     email = current_user.email
+    print(email)
     cvs = CV_model.query.filter_by(email=email).first()
+    print(cvs)
     return render_template('my_cv.html', cvs=cvs, email=email)
 
 
@@ -109,7 +115,8 @@ def my_cv():
 def recruiter():
     position = Positions.query.all()
     form = Positions_Create_Form(request.form)
-    all_users = UserModel.query.all()
+    all_users = CV_model.query.all()
+    interview = InterviewModel.query.all()
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
         del data['create']
@@ -117,7 +124,7 @@ def recruiter():
         db.session.add(pos)
         db.session.commit()
         return redirect(url_for('recruiter'))
-    return render_template('recruiter.html', position=position, form=form, all_users=all_users)
+    return render_template('recruiter.html', position=position, form=form, all_users=all_users, interview=interview)
 
 
 @app.route('/delete/position', methods=['GET', 'POST'])
