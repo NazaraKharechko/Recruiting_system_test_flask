@@ -7,6 +7,7 @@ import hashlib
 
 class UserModel(db.Model, UserMixin):
     __tablename__ = 'user'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
@@ -16,17 +17,18 @@ class UserModel(db.Model, UserMixin):
     def __repr__(self):
         return f'id = {self.id} email = {self.email}'
 
-    # def __init__(self, *args, **kwargs):
-    #     password = password.kwargs.pop('password')
-    #     password_has = generate_password_hash(password)
-    #     super.__init__(password=password_has, *args, **kwargs)
-    #
-    # def verify_password(self):
-    #     return check_password_hash(self.password, pwd)
+    def __init__(self, *args, **kwargs):
+        password = password.kwargs.pop('password')
+        password_has = generate_password_hash(password)
+        super.__init__(password=password_has, *args, **kwargs)
+
+    def verify_password(self):
+        return check_password_hash(self.password, pwd)
 
 
 class Positions(db.Model):
     __tablename__ = 'positions'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     positions = db.Column(db.String(50), nullable=False, unique=True)
@@ -49,6 +51,7 @@ class Positions(db.Model):
 
 class CV_model(db.Model):
     __tablename__ = 'cv'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
@@ -66,6 +69,7 @@ class CV_model(db.Model):
 
 class RecruiterModel(db.Model, UserMixin):
     __tablename__ = 'recruiter'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
@@ -90,6 +94,8 @@ class RecruiterModel(db.Model, UserMixin):
 
 class InterviewModel(db.Model):
     __tablename__ = 'interview'
+    __table_args__ = {'extend_existing': True}
+
     id = db.Column(db.Integer, primary_key=True)
 
     interview_date = db.Column(db.DateTime())
