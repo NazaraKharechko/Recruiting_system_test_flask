@@ -18,9 +18,9 @@ class UserModel(db.Model, UserMixin):
         return f'id = {self.id} email = {self.email}'
 
     def __init__(self, *args, **kwargs):
-        password = password.kwargs.pop('password')
-        password_has = generate_password_hash(password)
-        super.__init__(password=password_has, *args, **kwargs)
+        password = kwargs.pop("password")
+        password_hash = generate_password_hash(password)
+        super().__init__(password=password_hash, *args, **kwargs)
 
     def verify_password(self):
         return check_password_hash(self.password, pwd)
@@ -84,9 +84,9 @@ class RecruiterModel(db.Model, UserMixin):
         return f'name => {self.name} profession => {self.profession}'
 
     def __init__(self, *args, **kwargs):
-        password = password.kwargs.pop('password')
-        password_has = generate_password_hash(password)
-        super.__init__(password=password_has, *args, **kwargs)
+        password = kwargs.pop("password")
+        password_hash = generate_password_hash(password)
+        super().__init__(password=password_hash, *args, **kwargs)
 
     def verify_password(self):
         return check_password_hash(self.password, pwd)
