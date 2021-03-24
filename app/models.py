@@ -22,7 +22,7 @@ class UserModel(db.Model, UserMixin):
         password_hash = generate_password_hash(password)
         super().__init__(password=password_hash, *args, **kwargs)
 
-    def verify_password(self):
+    def verify_password(self, pwd):
         return check_password_hash(self.password, pwd)
 
 
@@ -88,7 +88,7 @@ class RecruiterModel(db.Model, UserMixin):
         password_hash = generate_password_hash(password)
         super().__init__(password=password_hash, *args, **kwargs)
 
-    def verify_password(self):
+    def verify_password(self, pwd):
         return check_password_hash(self.password, pwd)
 
 

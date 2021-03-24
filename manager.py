@@ -1,17 +1,17 @@
-from models import UserModel, RecruiterModel, Positions
+from app.models import UserModel, RecruiterModel, Positions
 from flask_script import Manager
 from app import db, app
 
 manager = Manager(app)
 
 
-admin = {'id': 1, 'email': 'admin@gmail.com',
+admin = {'email': 'admin@gmail.com',
          'password': 'admin2020', 'admin': 1}
 
-recruiter = {'id': 1, 'email': 'recruiter@gmail.com',
+recruiter = {'email': 'recruiter@gmail.com',
              'password': 'recruiter2020', 'name': 'Bob', 'profession': 'Js', 'status': 1}
 
-positions = {'id': 1, 'positions': 'Python',
+positions = {'positions': 'Python',
              'description': 'Python — інтерпретована оcscscs', 'start_date': '2021-03-02 12:06:00',
              'end_date': '2021-05-02 12:06:00'}
 

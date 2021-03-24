@@ -18,9 +18,9 @@ def login():
     if request.method == 'POST' and form.validate():
         candidate = UserModel.query.filter_by(email=form.email.data).first()
         recruiter = RecruiterModel.query.filter_by(email=form.email.data).first()
-        if recruiter and recruiter.password == form.password.data:
+        if recruiter and recruiter.verify_password(form.password.data):
             return redirect('/recruiter')
-        if candidate and candidate.password == form.password.data and candidate.admin == True:
+        if candidate and candidate.verify_password(form.password.data) and candidate.admin == True:
             login_user(candidate)
             return redirect('admin')
         else:
