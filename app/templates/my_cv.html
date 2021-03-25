@@ -6,7 +6,9 @@
 <h1>You Cv</h1>
 
 <br>
- <div> Welcome {{ cvs.name }}    <br> <b> You email => {{ cvs.email }}<br> End you cv => {{ cvs.cv }}</div>
+    <div> Welcome <h5> {{ cvs.name }} </h5> <br>  Age == {{ cvs.age }} <br> <b> You email => {{ cvs.email }}<br> End you cv => {{ cvs.cv }}</div>
+    <h1>Ви вибрали stek => {{ cvs.stek }} і це круто дерзай)</h1>
+    <br>
     <a href="{{ url_for('interview') }}"><button type="button" class="btn btn-info" data-toggle="collapse" >Interview </button></a>
 
 {% endblock %}
