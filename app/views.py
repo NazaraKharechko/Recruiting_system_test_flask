@@ -5,6 +5,7 @@ from app.forms import LoginForm, RegisterForm, Send_cv_Form, Positions_Create_Fo
     Create_Interview_Form
 from app.models import UserModel, Positions, CV_model, InterviewModel, RecruiterModel
 import datetime
+import html
 
 
 @app.route('/')
@@ -18,13 +19,14 @@ def login():
     if request.method == 'POST' and form.validate():
         candidate = UserModel.query.filter_by(email=form.email.data).first()
         recruiter = RecruiterModel.query.filter_by(email=form.email.data).first()
+        if candidate and candidate.password == form.password.data and candidate.admin == False:
+            login_user(candidate)
+            return redirect('/my/cv')
         if recruiter and recruiter.verify_password(form.password.data):
             return redirect('/recruiter')
         if candidate and candidate.verify_password(form.password.data) and candidate.admin == True:
             login_user(candidate)
             return redirect('admin')
-        else:
-            return redirect('/my/cv')
     return render_template('login.html', form=form)
 
 
@@ -105,9 +107,7 @@ def interview():
 @app.route('/my/cv',  methods=['GET', 'POST'])
 def my_cv():
     email = current_user.email
-    print(email)
     cvs = CV_model.query.filter_by(email=email).first()
-    print(cvs)
     return render_template('my_cv.html', cvs=cvs, email=email)
 
 
@@ -144,10 +144,14 @@ def create_interview():
     form = Create_Interview_Form(request.form)
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
-        print(data)
         del data['create']
-        i = InterviewModel(**data)
-        db.session.add(i)
-        db.session.commit()
-        return redirect(url_for('recruiter'))
+        profession = RecruiterModel.query.filter_by(id=data['recruiter_id']).first()
+        stek = CV_model.query.filter_by(id=data['candidates_id']).first()
+        if profession.profession >= stek.stek:
+            i = InterviewModel(**data)
+            db.session.add(i)
+            db.session.commit()
+            return redirect(url_for('recruiter'))
+        else:
+            return """Profession recruiter does not match the stack user Go back?"""
     return render_template('create_interview.html', form=form)

@@ -84,7 +84,7 @@ class RecruiterModel(db.Model, UserMixin):
         return f'name => {self.name} profession => {self.profession}'
 
     def __init__(self, *args, **kwargs):
-        password = kwargs.pop("password")
+        password = kwargs.pop('password')
         password_hash = generate_password_hash(password)
         super().__init__(password=password_hash, *args, **kwargs)
 
