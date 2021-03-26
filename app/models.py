@@ -68,6 +68,8 @@ class CV_model(db.Model):
                              default=r)
     interview = db.relationship('InterviewModel', backref='candidates', lazy=True)
 
+    reject = db.relationship('RejectModel', backref='candidates_reject', lazy=True)
+
     def __repr__(self):
         return f'id = {self.id} positions = {self.name} stek => {self.stek}'
 
