@@ -2,8 +2,8 @@ from flask import render_template, request, redirect, url_for
 from flask_login import login_user, logout_user, current_user
 from app import app, db
 from app.forms import LoginForm, RegisterForm, Send_cv_Form, Positions_Create_Form, Positions_Delete_Form, \
-    Create_Interview_Form
-from app.models import UserModel, Positions, CV_model, InterviewModel, RecruiterModel
+    Create_Interview_Form, Reject_Form
+from app.models import UserModel, Positions, CV_model, InterviewModel, RecruiterModel, RejectModel
 import datetime
 import html
 
@@ -19,7 +19,7 @@ def login():
     if request.method == 'POST' and form.validate():
         candidate = UserModel.query.filter_by(email=form.email.data).first()
         recruiter = RecruiterModel.query.filter_by(email=form.email.data).first()
-        if candidate and candidate.password == form.password.data and candidate.admin == False:
+        if candidate and candidate.verify_password(form.password.data) and candidate.admin == False:
             login_user(candidate)
             return redirect('/my/cv')
         if recruiter and recruiter.verify_password(form.password.data):
@@ -43,7 +43,7 @@ def register():
         user = UserModel(**data)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
 
@@ -59,13 +59,14 @@ def positions():
     return render_template('positions.html', position=position)
 
 
-@app.route('/cv', methods=['GET', 'POST'])
-def cv():
+@app.route('/cv/<int:id_pos>', methods=['GET', 'POST'])
+def cv(id_pos):
     form = Send_cv_Form(request.form)
+    id_p = int(id_pos)
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
         del data['send']
-        cv = CV_model(**data)
+        cv = CV_model(**data, position_id=id_p)
         db.session.add(cv)
         db.session.commit()
         return redirect(url_for('positions'))
@@ -75,11 +76,11 @@ def cv():
 @app.route('/interview')
 def interview():
     email = current_user.email
-    id = UserModel.query.filter_by(email=email).first()
-    print(id.id)
+    id = CV_model.query.filter_by(email=email).first()
     interview = InterviewModel.query.filter_by(candidates_id=id.id).first()
-    print(interview)
-    return render_template('interview.html', interview=interview)
+    reject = RejectModel.query.filter_by(candidates_id=id.id).first()
+    print(id.id)
+    return render_template('interview.html', interview=interview, reject=reject)
 
 
 # @app.route('/login/users', methods=['GET', 'POST'])
@@ -116,6 +117,7 @@ def recruiter():
     position = Positions.query.all()
     form = Positions_Create_Form(request.form)
     all_users = CV_model.query.all()
+    all_reject_user = RejectModel.query.all()
     interview = InterviewModel.query.all()
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
@@ -124,7 +126,8 @@ def recruiter():
         db.session.add(pos)
         db.session.commit()
         return redirect(url_for('recruiter'))
-    return render_template('recruiter.html', position=position, form=form, all_users=all_users, interview=interview)
+    return render_template('recruiter.html', position=position, form=form, all_users=all_users, interview=interview,
+                           all_reject_user=all_reject_user)
 
 
 @app.route('/delete/position', methods=['GET', 'POST'])
@@ -155,3 +158,16 @@ def create_interview():
         else:
             return """Profession recruiter does not match the stack user Go back?"""
     return render_template('create_interview.html', form=form)
+
+
+@app.route('/reject_user', methods=['GET', 'POST'])
+def reject_user():
+    form = Reject_Form(request.form)
+    if request.method == 'POST' and form.validate():
+        data = dict(form.data)
+        del data['reject']
+        reject = RejectModel(**data)
+        db.session.add(reject)
+        db.session.commit()
+        return redirect(url_for('recruiter'))
+    return render_template('reject_user.html', form=form)

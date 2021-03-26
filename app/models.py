@@ -2,7 +2,7 @@ from app import db
 from flask_login import UserMixin
 import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-import hashlib
+import random
 
 
 class UserModel(db.Model, UserMixin):
@@ -35,6 +35,7 @@ class Positions(db.Model):
     description = db.Column(db.String(350), nullable=False)
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
+    candidate = db.relationship('CV_model', uselist=False, backref='position')
 
     def __repr__(self):
         return f'id = {self.id} positions = {self.positions} {self.end_date}'
@@ -54,13 +55,17 @@ class CV_model(db.Model):
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), nullable=False, unique=True)
+    email = db.Column(db.String(120), nullable=False)
     name = db.Column(db.String(20), nullable=False)
     age = db.Column(db.Integer(), nullable=False)
     cv = db.Column(db.String(50), default='cv netu')
     stek = db.Column(db.String(50), nullable=False)
+
+    r = random.randint(1, 1)
+    position_id = db.Column(db.Integer, db.ForeignKey('positions.id', ondelete='CASCADE'))
+
     recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id', ondelete='CASCADE'), nullable=False,
-                             default=1 or 2)
+                             default=r)
     interview = db.relationship('InterviewModel', backref='candidates', lazy=True)
 
     def __repr__(self):
@@ -107,3 +112,17 @@ class InterviewModel(db.Model):
     def __repr__(self):
         return f'data => {self.interview_date}'
 
+
+class RejectModel(db.Model):
+    __tablename__ = 'reject'
+    __table_args__ = {'extend_existing': True}
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    candidates_id = db.Column(db.Integer, db.ForeignKey('cv.id'),
+                              nullable=False)
+    why = db.Column(db.String(200))
+    chek = db.Column(db.Boolean())
+
+    def __repr__(self):
+        return f'who => {self.candidates_id} why > {self.why}'

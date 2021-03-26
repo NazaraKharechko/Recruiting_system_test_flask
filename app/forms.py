@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, PasswordField, SubmitField, FileField, DateField, SelectField
+from wtforms import Form, StringField, PasswordField, SubmitField, FileField, BooleanField, SelectField
 from wtforms.validators import DataRequired, length, Email, EqualTo
 
 
@@ -42,6 +42,13 @@ class Positions_Create_Form(Form):
 class Positions_Delete_Form(Form):
     id_delete = StringField('Id_delete')
     delete = SubmitField('Delete')
+
+
+class Reject_Form(Form):
+    candidates_id = StringField('Сandidates_id')
+    why = StringField('Why')
+    chek = BooleanField('Chek')
+    reject = SubmitField('Reject')
 
 
 class Create_Interview_Form(Form):
