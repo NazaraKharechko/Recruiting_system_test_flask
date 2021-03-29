@@ -9,7 +9,6 @@ import random
 
 @app.route('/')
 def home():
-    print(current_user.is_authenticated)
     render_template('base.html', current_user=current_user)
     return redirect('positions')
 
@@ -82,7 +81,6 @@ def interview():
     id = CV_model.query.filter_by(email=email).first()
     interview = InterviewModel.query.filter_by(candidates_id=id.id).first()
     reject = RejectModel.query.filter_by(candidates_id=id.id).first()
-    print(id.id)
     return render_template('interview.html', interview=interview, reject=reject)
 
 
