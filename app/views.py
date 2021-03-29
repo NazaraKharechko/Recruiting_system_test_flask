@@ -4,12 +4,13 @@ from app import app, db
 from app.forms import LoginForm, RegisterForm, Send_cv_Form, Positions_Create_Form, Positions_Delete_Form, \
     Create_Interview_Form, Reject_Form
 from app.models import UserModel, Positions, CV_model, InterviewModel, RecruiterModel, RejectModel
-import datetime
-import html
+import random
 
 
 @app.route('/')
 def home():
+    print(current_user.is_authenticated)
+    render_template('base.html', current_user=current_user)
     return redirect('positions')
 
 
@@ -50,7 +51,7 @@ def register():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('positions'))
 
 
 @app.route('/positions')
@@ -63,10 +64,12 @@ def positions():
 def cv(id_pos):
     form = Send_cv_Form(request.form)
     id_p = int(id_pos)
+    r = RecruiterModel.query.all()
+    random_recruiter_id = random.randint(1, len(r))
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
         del data['send']
-        cv = CV_model(**data, position_id=id_p)
+        cv = CV_model(**data, position_id=id_p, recruiter_id=random_recruiter_id)
         db.session.add(cv)
         db.session.commit()
         return redirect(url_for('positions'))
@@ -105,7 +108,7 @@ def interview():
 #     return render_template('login_users.html', form=form)
 
 
-@app.route('/my/cv',  methods=['GET', 'POST'])
+@app.route('/my/cv', methods=['GET', 'POST'])
 def my_cv():
     email = current_user.email
     cvs = CV_model.query.filter_by(email=email).first()

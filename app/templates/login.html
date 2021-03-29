@@ -6,21 +6,31 @@
     <br>
 <br>
 <br>
-    <form method="post">
-        {% for field in form %}
-            {% if not field == form.register %}
-                <div>
-                    {{ field.label }}
-                    {{ field }}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Login</h3>
+    <div class="box">
+        <form method="POST" action="/login">
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="email" name="email" placeholder="Your Email" autofocus="">
                 </div>
-                {% if field.errors %}
-                    <div>{{ field.errors[0] }}</div>
-                {% endif %}
-            {% else %}
-                <div>{{ field }}</div>
-            {% endif %}
-        {% endfor %}
-    </form>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" name="password" placeholder="Your Password">
+                </div>
+            </div>
+            <div class="field">
+                <label class="checkbox">
+                    <input type="checkbox">
+                    Remember me
+                </label>
+            </div>
+            <button class="button is-block is-info is-large is-fullwidth">Login</button>
+        </form>
+    </div>
+</div>
     <a href="{{ url_for('register') }}"><button>Register</button></a>
 
 {% endblock %}

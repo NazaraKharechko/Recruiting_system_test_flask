@@ -61,11 +61,9 @@ class CV_model(db.Model):
     cv = db.Column(db.String(50), default='cv netu')
     stek = db.Column(db.String(50), nullable=False)
 
-    r = random.randint(1, 1)
     position_id = db.Column(db.Integer, db.ForeignKey('positions.id', ondelete='CASCADE'))
 
-    recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id', ondelete='CASCADE'), nullable=False,
-                             default=r)
+    recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id', ondelete='CASCADE'), nullable=False)
     interview = db.relationship('InterviewModel', backref='candidates', lazy=True)
 
     reject = db.relationship('RejectModel', backref='candidates_reject', lazy=True)
