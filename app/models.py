@@ -64,7 +64,7 @@ class CV_model(db.Model):
     position_id = db.Column(db.Integer, db.ForeignKey('positions.id', ondelete='CASCADE'))
 
     recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id', ondelete='CASCADE'), nullable=False)
-    interview = db.relationship('InterviewModel', backref='candidates', lazy=True)
+    # interview = db.relationship('InterviewModel', backref='candidates', lazy=True)
 
     reject = db.relationship('RejectModel', backref='candidates_reject', lazy=True)
 
@@ -106,8 +106,7 @@ class InterviewModel(db.Model):
     interview_date = db.Column(db.DateTime())
     recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id'),
                              nullable=False)
-    candidates_id = db.Column(db.Integer, db.ForeignKey('cv.id'),
-                              nullable=False)
+    candidates_email = db.Column(db.String(30), nullable=False)
 
     def __repr__(self):
         return f'data => {self.interview_date}'

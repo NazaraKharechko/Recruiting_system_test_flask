@@ -46,21 +46,19 @@ class Positions_Delete_Form(Form):
 
 
 class Reject_Form(Form):
-    candidates_id = StringField('Сandidates_id')
+    choices_users = [(g.id, [g.id, g.name, g.stek]) for g in CV_model.query.all()]
+    candidates_id = SelectField(choices=choices_users)
+
     why = StringField('Why')
     chek = BooleanField('Chek')
     reject = SubmitField('Reject')
 
 
 class Create_Interview_Form(Form):
-    rek = RecruiterModel.query.all()
-    us = CV_model.query.all()
-    for i in rek:
-        choices_interview = [(i.id, i.profession)]
-        recruiter_id = SelectField(choices=choices_interview)
-    for u in us:
-        choices_users = [(u.id, u.stek)]
-        candidates_id = SelectField(choices=choices_users)
+    choices_interview = [(g.id, [g.id, g.name,  g.profession]) for g in RecruiterModel.query.all()]
+    recruiter_id = SelectField(choices=choices_interview)
+    choices_users = [(g.email, [g.id, g.name, g.stek]) for g in CV_model.query.all()]
+    candidates_email = SelectField(choices=choices_users)
     interview_date = StringField('Interview_date')
     create = SubmitField('Create')
 
