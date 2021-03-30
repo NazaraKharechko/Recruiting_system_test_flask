@@ -57,10 +57,10 @@ class Create_Interview_Form(Form):
     us = CV_model.query.all()
     for i in rek:
         choices_interview = [(i.id, i.profession)]
-        interview_date = StringField('Interview_date')
         recruiter_id = SelectField(choices=choices_interview)
     for u in us:
         choices_users = [(u.id, u.stek)]
         candidates_id = SelectField(choices=choices_users)
-        create = SubmitField('Create')
+    interview_date = StringField('Interview_date')
+    create = SubmitField('Create')
 
