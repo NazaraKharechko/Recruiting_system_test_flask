@@ -86,7 +86,7 @@ class RecruiterModel(db.Model, UserMixin):
     interview = db.relationship('InterviewModel', backref='recruiter', lazy=True)
 
     def __repr__(self):
-        return f'name => {self.name} profession => {self.profession}'
+        return f' id => {self.id} name => {self.name} profession => {self.profession}'
 
     def __init__(self, *args, **kwargs):
         password = kwargs.pop('password')

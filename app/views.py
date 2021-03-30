@@ -64,11 +64,11 @@ def cv(id_pos):
     form = Send_cv_Form(request.form)
     id_p = int(id_pos)
     r = RecruiterModel.query.all()
-    random_recruiter_id = random.randint(1, len(r))
+    random_recruiter_id = random.choice(r)
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
         del data['send']
-        cv = CV_model(**data, position_id=id_p, recruiter_id=random_recruiter_id)
+        cv = CV_model(**data, position_id=id_p, recruiter_id=random_recruiter_id.id)
         db.session.add(cv)
         db.session.commit()
         return redirect(url_for('positions'))
@@ -109,7 +109,7 @@ def interview():
 @app.route('/my/cv', methods=['GET', 'POST'])
 def my_cv():
     email = current_user.email
-    cvs = CV_model.query.filter_by(email=email).first()
+    cvs = CV_model.query.filter_by(email=email)
     return render_template('my_cv.html', cvs=cvs, email=email)
 
 
@@ -172,3 +172,4 @@ def reject_user():
         db.session.commit()
         return redirect(url_for('recruiter'))
     return render_template('reject_user.html', form=form)
+
