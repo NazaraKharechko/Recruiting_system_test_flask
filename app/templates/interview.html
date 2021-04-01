@@ -8,10 +8,13 @@
     <h1>Interview yourself</h1>
     <br>
     {% if interview %}
-         <div> Ваше ітервю заплвновано на <h4>{{ interview.interview_date }}</h4> не забудьте)</div>
+         {% for i in interview %}
+            <div> Ваше ітервю заплвновано на <h4>{{ i.interview_date }}</h4> не забудьте)</div>
          <br>
          <br>
-         <div> Ваш бос який її буде проводити за <h5>N{{ interview.recruiter_id }}</h5> імя згодом взнаєте =) шутка Боб</div>
+         <div> Ваш бос який її буде проводити за <h5>N{{ i.recruiter_id }}</h5> імя згодом взнаєте =) шутка Боб</div>
+         {% endfor %}
+
     {% elif  reject %}
         <h4>Вам відхилино в інтервю тому що => <b>{{ reject.why }}</b></h4>
     {% else %}

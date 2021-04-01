@@ -2,7 +2,8 @@ from app import db
 from flask_login import UserMixin
 import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-import random
+from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.orm import relationship
 
 
 class UserModel(db.Model, UserMixin):
@@ -35,7 +36,7 @@ class Positions(db.Model):
     description = db.Column(db.String(350), nullable=False)
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    candidate = db.relationship('CV_model', uselist=False, backref='position')
+    candidate = db.relationship('CVS_model', uselist=False, backref='position')
 
     def __repr__(self):
         return f'id = {self.id} positions = {self.positions} {self.end_date}'
@@ -50,8 +51,8 @@ class Positions(db.Model):
             db.session.commit()
 
 
-class CV_model(db.Model):
-    __tablename__ = 'cv'
+class CVS_model(db.Model):
+    __tablename__ = 'cvs'
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
@@ -64,8 +65,7 @@ class CV_model(db.Model):
     position_id = db.Column(db.Integer, db.ForeignKey('positions.id', ondelete='CASCADE'))
 
     recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id', ondelete='CASCADE'), nullable=False)
-    # interview = db.relationship('InterviewModel', backref='candidates', lazy=True)
-
+    interview = db.relationship('InterviewModel', backref='candidates', lazy=True)
     reject = db.relationship('RejectModel', backref='candidates_reject', lazy=True)
 
     def __repr__(self):
@@ -82,7 +82,7 @@ class RecruiterModel(db.Model, UserMixin):
     name = db.Column(db.String(20), nullable=False)
     profession = db.Column(db.String(20), nullable=False)
     status = db.Column(db.Boolean, default=False, nullable=False)
-    candidates = db.relationship('CV_model', backref='recruiter')
+    candidates = db.relationship('CVS_model', backref='recruiter')
     interview = db.relationship('InterviewModel', backref='recruiter', lazy=True)
 
     def __repr__(self):
@@ -106,7 +106,8 @@ class InterviewModel(db.Model):
     interview_date = db.Column(db.DateTime())
     recruiter_id = db.Column(db.Integer, db.ForeignKey('recruiter.id'),
                              nullable=False)
-    candidates_email = db.Column(db.String(30), nullable=False)
+    candidates_id = db.Column(db.Integer, db.ForeignKey('cvs.id'),
+                              nullable=False)
 
     def __repr__(self):
         return f'data => {self.interview_date}'
@@ -118,7 +119,7 @@ class RejectModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    candidates_id = db.Column(db.Integer, db.ForeignKey('cv.id'),
+    candidates_id = db.Column(db.Integer, db.ForeignKey('cvs.id'),
                               nullable=False)
     why = db.Column(db.String(200))
     chek = db.Column(db.Boolean())

@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, current_user
 from app import app, db
 from app.forms import LoginForm, RegisterForm, Send_cv_Form, Positions_Create_Form, Positions_Delete_Form, \
     Create_Interview_Form, Reject_Form
-from app.models import UserModel, Positions, CV_model, InterviewModel, RecruiterModel, RejectModel
+from app.models import UserModel, Positions, CVS_model, InterviewModel, RecruiterModel, RejectModel
 import random
 
 
@@ -68,7 +68,7 @@ def cv(id_pos):
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
         del data['send']
-        cv = CV_model(**data, position_id=id_p, recruiter_id=random_recruiter_id.id)
+        cv = CVS_model(**data, position_id=id_p, recruiter_id=random_recruiter_id.id)
         db.session.add(cv)
         db.session.commit()
         return redirect(url_for('positions'))
@@ -78,8 +78,8 @@ def cv(id_pos):
 @app.route('/interview')
 def interview():
     email = current_user.email
-    id = CV_model.query.filter_by(email=email).first()
-    interview = InterviewModel.query.filter_by(candidates_email=email).first()
+    id = CVS_model.query.filter_by(email=email).first()
+    interview = InterviewModel.query.filter_by(candidates_id=id.id)
     reject = RejectModel.query.filter_by(candidates_id=id.id).first()
     return render_template('interview.html', interview=interview, reject=reject)
 
@@ -109,7 +109,7 @@ def interview():
 @app.route('/my/cv', methods=['GET', 'POST'])
 def my_cv():
     email = current_user.email
-    cvs = CV_model.query.filter_by(email=email)
+    cvs = CVS_model.query.filter_by(email=email)
     return render_template('my_cv.html', cvs=cvs, email=email)
 
 
@@ -117,7 +117,7 @@ def my_cv():
 def recruiter():
     position = Positions.query.all()
     form = Positions_Create_Form(request.form)
-    all_users = CV_model.query.all()
+    all_users = CVS_model.query.all()
     all_reject_user = RejectModel.query.all()
     interview = InterviewModel.query.all()
     if request.method == 'POST' and form.validate():
@@ -150,7 +150,7 @@ def create_interview():
         data = dict(form.data)
         del data['create']
         profession = RecruiterModel.query.filter_by(id=data['recruiter_id']).first()
-        stek = CV_model.query.filter_by(email=data['candidates_email']).first()
+        stek = CVS_model.query.filter_by(id=data['candidates_id']).first()
         if profession.profession >= stek.stek:
             i = InterviewModel(**data)
             db.session.add(i)

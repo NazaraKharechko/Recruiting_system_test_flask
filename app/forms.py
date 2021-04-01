@@ -1,6 +1,6 @@
 from wtforms import Form, StringField, PasswordField, SubmitField, FileField, BooleanField, SelectField
 from wtforms.validators import DataRequired, length, Email, EqualTo
-from .models import RecruiterModel, CV_model
+from .models import RecruiterModel, CVS_model
 
 
 class RegisterForm(Form):
@@ -46,7 +46,7 @@ class Positions_Delete_Form(Form):
 
 
 class Reject_Form(Form):
-    choices_users = [(g.id, [g.id, g.name, g.stek]) for g in CV_model.query.all()]
+    choices_users = [(g.id, [g.id, g.name, g.stek]) for g in CVS_model.query.all()]
     candidates_id = SelectField(choices=choices_users)
 
     why = StringField('Why')
@@ -57,8 +57,8 @@ class Reject_Form(Form):
 class Create_Interview_Form(Form):
     choices_interview = [(g.id, [g.id, g.name,  g.profession]) for g in RecruiterModel.query.all()]
     recruiter_id = SelectField(choices=choices_interview)
-    choices_users = [(g.email, [g.id, g.name, g.stek]) for g in CV_model.query.all()]
-    candidates_email = SelectField(choices=choices_users)
+    choices_users = [(g.id, [g.id, g.name, g.stek]) for g in CVS_model.query.all()]
+    candidates_id = SelectField(choices=choices_users)
     interview_date = StringField('Interview_date')
     create = SubmitField('Create')
 

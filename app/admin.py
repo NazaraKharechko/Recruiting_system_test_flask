@@ -4,7 +4,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.menu import MenuLink
 from flask_login import current_user, LoginManager
 from app import app, db
-from app.models import UserModel, Positions, CV_model, RecruiterModel, InterviewModel, RejectModel
+from app.models import UserModel, Positions, CVS_model, RecruiterModel, InterviewModel, RejectModel
 
 
 class MyModelView(ModelView):
@@ -38,7 +38,7 @@ def load_user(user_id):
 
 admin.add_view(MySecureModelView(UserModel, db.session))
 admin.add_view(MySecureModelView(Positions, db.session))
-admin.add_view(MySecureModelView(CV_model, db.session))
+admin.add_view(MySecureModelView(CVS_model, db.session))
 admin.add_view(MySecureModelView(RecruiterModel, db.session))
 admin.add_view(MySecureModelView(InterviewModel, db.session))
 admin.add_view(MySecureModelView(RejectModel, db.session))
