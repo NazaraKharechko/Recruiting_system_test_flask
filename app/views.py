@@ -151,7 +151,9 @@ def create_interview():
         del data['create']
         profession = RecruiterModel.query.filter_by(id=data['recruiter_id']).first()
         stek = CVS_model.query.filter_by(id=data['candidates_id']).first()
-        if profession.profession >= stek.stek:
+        user_stek = stek.position_id
+        users = Positions.query.filter_by(id=user_stek).first()
+        if profession.profession >= users.positions:
             i = InterviewModel(**data)
             db.session.add(i)
             db.session.commit()

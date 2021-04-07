@@ -60,7 +60,6 @@ class CVS_model(db.Model):
     name = db.Column(db.String(20), nullable=False)
     age = db.Column(db.Integer(), nullable=False)
     cv = db.Column(db.String(50), default='cv netu')
-    stek = db.Column(db.String(50), nullable=False)
 
     position_id = db.Column(db.Integer, db.ForeignKey('positions.id', ondelete='CASCADE'))
 
@@ -69,7 +68,7 @@ class CVS_model(db.Model):
     reject = db.relationship('RejectModel', backref='candidates_reject', lazy=True)
 
     def __repr__(self):
-        return f'id = {self.id} positions = {self.name} stek => {self.stek}'
+        return f'id = {self.id} positions = {self.name} '
 
 
 class RecruiterModel(db.Model, UserMixin):
