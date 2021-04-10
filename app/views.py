@@ -149,12 +149,15 @@ def create_interview():
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
         del data['create']
-        profession = RecruiterModel.query.filter_by(id=data['recruiter_id']).first()
-        stek = CVS_model.query.filter_by(id=data['candidates_id']).first()
+        profession = RecruiterModel.query.filter_by(id=data['recruiter_id'].id).first()
+        stek = CVS_model.query.filter_by(id=data['candidates_id'].id).first()
         user_stek = stek.position_id
         users = Positions.query.filter_by(id=user_stek).first()
         if profession.profession >= users.positions:
-            i = InterviewModel(**data)
+            recruiter_id = data['recruiter_id'].id
+            candidates_id = data['candidates_id'].id
+            i = InterviewModel(recruiter_id=recruiter_id, candidates_id=candidates_id, **data)
+            print(i)
             db.session.add(i)
             db.session.commit()
             return redirect(url_for('recruiter'))

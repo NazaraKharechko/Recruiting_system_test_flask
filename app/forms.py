@@ -1,6 +1,7 @@
 from wtforms import Form, StringField, PasswordField, SubmitField, FileField, BooleanField, SelectField
 from wtforms.validators import DataRequired, length, Email, EqualTo
 from .models import RecruiterModel, CVS_model, Positions
+from wtforms_sqlalchemy.fields import QuerySelectField
 
 
 class RegisterForm(Form):
@@ -46,8 +47,8 @@ class Positions_Delete_Form(Form):
 
 
 class Reject_Form(Form):
-    choices_users = [(g.id, [g.id, g.name, Positions.query.filter_by(id=g.position_id).first().positions]) for g in CVS_model.query.all()]
-    candidates_id = SelectField(choices=choices_users)
+    users_id = QuerySelectField(query_factory=CVS_model.query.all)
+    # candidates_id = SelectField(choices=choices_users)
 
     why = StringField('Why')
     chek = BooleanField('Chek')
@@ -55,10 +56,9 @@ class Reject_Form(Form):
 
 
 class Create_Interview_Form(Form):
-    choices_interview = [(g.id, [g.id, g.name,  g.profession]) for g in RecruiterModel.query.all()]
-    recruiter_id = SelectField(choices=choices_interview)
-    choices_users = [(g.id, [g.id, g.name, Positions.query.filter_by(id=g.position_id).first().positions]) for g in CVS_model.query.all()]
-    candidates_id = SelectField(choices=choices_users)
+    recruiter_id = QuerySelectField(query_factory=RecruiterModel.query.all)
+    # recruiter_id = SelectField(choices=choices_interview)
+    candidates_id = QuerySelectField(query_factory=CVS_model.query.all)
+    # candidates_id = SelectField(choices=choices_users)
     interview_date = StringField('Interview_date')
     create = SubmitField('Create')
-

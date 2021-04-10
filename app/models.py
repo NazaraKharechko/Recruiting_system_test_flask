@@ -68,7 +68,7 @@ class CVS_model(db.Model):
     reject = db.relationship('RejectModel', backref='candidates_reject', lazy=True)
 
     def __repr__(self):
-        return f'id = {self.id} positions = {self.name} '
+        return f'id = {self.id} name = {self.name} '
 
 
 class RecruiterModel(db.Model, UserMixin):
@@ -125,3 +125,22 @@ class RejectModel(db.Model):
 
     def __repr__(self):
         return f'who => {self.candidates_id} why > {self.why}'
+
+
+
+
+
+
+
+# __mapper_args__ = {
+#     'polymorphic_identity': 'user',
+#     # 'polymorphic_on': user_type
+# }
+
+# __table_args__ = {'extend_existing': True}
+# __mapper_args__ = {
+#     'polymorphic_identity': 'recruiter',
+# }
+# def __repr__(self):
+#     return ' '.join([super().__repr__(), f' id => {self.id} name => {self.name} profession => {self.profession}'])
+#
