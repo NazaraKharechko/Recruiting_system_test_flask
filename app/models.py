@@ -3,7 +3,7 @@ from flask_login import UserMixin
 import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import Column, Integer, String, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, mapper
 
 
 class UserModel(db.Model, UserMixin):
@@ -14,6 +14,11 @@ class UserModel(db.Model, UserMixin):
     email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
     admin = db.Column(db.Boolean, default=False, nullable=False)
+
+    # __mapper_args__ = {
+    #     'polymorphic_identity': 'user',
+    #     'polymorphic_on': user_type
+    # }
 
     def __repr__(self):
         return f'id = {self.id} email = {self.email}'

@@ -79,7 +79,7 @@ def cv(id_pos):
 def interview():
     email = current_user.email
     id = CVS_model.query.filter_by(email=email).first()
-    interview = InterviewModel.query.filter_by(candidates_id=id.id)
+    interview = InterviewModel.query.filter_by(candidates_id=id.id).first()
     reject = RejectModel.query.filter_by(candidates_id=id.id).first()
     return render_template('interview.html', interview=interview, reject=reject)
 
@@ -149,15 +149,12 @@ def create_interview():
     if request.method == 'POST' and form.validate():
         data = dict(form.data)
         del data['create']
-        profession = RecruiterModel.query.filter_by(id=data['recruiter_id'].id).first()
-        stek = CVS_model.query.filter_by(id=data['candidates_id'].id).first()
+        profession = RecruiterModel.query.filter_by(id=data['recruiter_id']).first()
+        stek = CVS_model.query.filter_by(id=data['candidates_id']).first()
         user_stek = stek.position_id
         users = Positions.query.filter_by(id=user_stek).first()
         if profession.profession >= users.positions:
-            recruiter_id = data['recruiter_id'].id
-            candidates_id = data['candidates_id'].id
-            i = InterviewModel(recruiter_id=recruiter_id, candidates_id=candidates_id, **data)
-            print(i)
+            i = InterviewModel(**data)
             db.session.add(i)
             db.session.commit()
             return redirect(url_for('recruiter'))
